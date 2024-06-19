@@ -4,7 +4,7 @@
     "name": "mauvpark",
     "url": "https://github.com/mauvpark/vscode-type-to-json"
   },
-  "publisher": "mauvpark",
+  "publisher": "mauvpark92",
   "displayName": "typeToJson",
   "description": "Make default json values from your type object.",
   "version": "0.0.1",
