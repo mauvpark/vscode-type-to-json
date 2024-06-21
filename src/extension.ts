@@ -46,7 +46,10 @@ function parse(text: string) {
   onlyKeyTypeText.split(";").forEach((keyType) => {
     const splited = keyType.split(":");
     if (splited.length === 2) {
-      splited[0] = splited[0].trim();
+      // Key
+      const validKey = (splited[0].split("\r\n").at(-1) as string).trim(); // Comment should have "\r\n". If Comment does not have "\r\n", next key would not be the key.
+      splited[0] = validKey;
+      // Value
       splited[1] = parseType(
         splited[1].trim(),
         customSettings.get("defaultValues")
