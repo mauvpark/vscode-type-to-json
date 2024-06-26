@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
-import parseType from "./utils/parseType";
 import * as fs from "fs";
 import * as os from "os";
 import path from "path";
+import parse from "./utils/parse";
 
 /**
  *
@@ -35,37 +35,6 @@ function validateText(text: string) {
 
 /**
  *
- * @description Parse type object.
- */
-function parse(text: string) {
-  const customSettings = vscode.workspace.getConfiguration("typetojson");
-  const typeList: Array<string[]> = [];
-  const startIndex = text.indexOf("{");
-  const endIndex = text.lastIndexOf("}"); // Type value could be object type. So, it must be last index or should check signs are matching.
-  const onlyKeyTypeText = text.slice(startIndex + 1, endIndex - 1);
-  onlyKeyTypeText.split(";").forEach((keyType) => {
-    const splited = keyType.split(":");
-    if (splited.length === 2) {
-      // Key
-      const validKey = (splited[0].split("\r\n").at(-1) as string).trim(); // Comment should have "\r\n". If Comment does not have "\r\n", next key would not be the key.
-      splited[0] = validKey;
-      // Value
-      splited[1] = parseType(
-        splited[1].trim(),
-        customSettings.get("defaultValues")
-      );
-      typeList.push(splited);
-    }
-  });
-  if (typeList.length > 0) {
-    const transformedObj = Object.fromEntries(typeList);
-    return transformedObj;
-  }
-  throw new Error("Type is empty!");
-}
-
-/**
- *
  * @description Get unused column from your current editor.
  */
 const getViewColumn = () => {
@@ -84,14 +53,19 @@ const getViewColumn = () => {
   return activeEditor.viewColumn;
 };
 
-async function tranformFromTs() {
+export async function tranformFromTs() {
   try {
+    // Parsing process
     const selectedText = getSelectedText();
     const validatedText = validateText(selectedText);
-    const transformedObj = JSON.stringify(parse(validatedText));
+    const stringifiedObj = parse(validatedText);
+
+    // Make file
     const tmpFilePath = path.join(os.tmpdir(), "ts-to-values.json");
     const tmpFileUri = vscode.Uri.file(tmpFilePath);
-    fs.writeFileSync(tmpFilePath, `${transformedObj}`);
+    fs.writeFileSync(tmpFilePath, stringifiedObj);
+
+    // Execute
     vscode.commands.executeCommand("vscode.open", tmpFileUri, getViewColumn());
   } catch (error) {
     vscode.window.showErrorMessage((error as { message: string }).message);

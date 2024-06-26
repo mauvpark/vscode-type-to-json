@@ -4,6 +4,12 @@ All notable changes to the "typetojson" extension will be documented in this fil
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [Unreleased]
+## [0.0.1]
 
 - Initial release
+
+## [1.0.0]
+
+- Parsing process is changed.
+- Nested object is available(⚠️imported class name is not usable yet. I will try to find out in next version!).
+- Commented type object is also available(But comment will be removed in json).

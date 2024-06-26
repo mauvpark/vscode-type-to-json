@@ -1,15 +1,38 @@
-import * as assert from 'assert';
+import * as assert from "assert";
+import * as vscode from "vscode";
+import TypeToJson from "../utils/parse";
+import * as MockTypes from "./test";
 
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
-import * as vscode from 'vscode';
-// import * as myExtension from '../../extension';
+suite("Extension Test Suite", () => {
+  vscode.window.showInformationMessage("Start all tests.");
 
-suite('Extension Test Suite', () => {
-	vscode.window.showInformationMessage('Start all tests.');
+  test("Simple object", () => {
+    const result = TypeToJson(MockTypes.Test1);
+    const parse = JSON.parse(result);
+    assert.deepEqual({ a: "", b: 0, c: [], d: "undefined" }, parse);
+  });
 
-	test('Sample test', () => {
-		assert.strictEqual(-1, [1, 2, 3].indexOf(5));
-		assert.strictEqual(-1, [1, 2, 3].indexOf(0));
-	});
+  test("Simple object with comments", () => {
+    const result = TypeToJson(MockTypes.Test2);
+    const parse = JSON.parse(result);
+    assert.deepEqual({ a: "", b: 0, c: [], d: "undefined" }, parse);
+  });
+
+  test("Complicating object with comments", () => {
+    const result = TypeToJson(MockTypes.Test3);
+    const parse = JSON.parse(result);
+    assert.deepEqual(
+      {
+        adsf: "",
+        b: 0,
+        cvcxv: [],
+        d: "undefined",
+        e: {},
+        f: { t: { a: "", b: [], c: { h: { k: "" } } } },
+        k: {},
+        o: { t: { a: "", b: [], c: { h: { j: "", n: 0 } } } },
+      },
+      parse
+    );
+  });
 });
