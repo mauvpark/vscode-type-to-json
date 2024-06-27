@@ -23,10 +23,10 @@ function validateText(text: string) {
   const endIndex = text.lastIndexOf("}");
   const hasEndIndex = endIndex >= 1 ? true : false;
   if (!text.length) {
-    throw new Error("Nothing is selected");
+    throw new Error("Nothing is selected. 😢");
   } else if (!hasStartIndex || !hasEndIndex) {
     throw new Error(
-      "The text must have left and right brace. e.g. {key: string}"
+      "The text must have left and right brace. e.g. {key: string} 😱"
     );
   } else {
     return text;
@@ -55,6 +55,9 @@ const getViewColumn = () => {
 
 export async function tranformFromTs() {
   try {
+    vscode.window.showInformationMessage(
+      "typeToJson: Transforming is ongoing...😊"
+    );
     // Parsing process
     const selectedText = getSelectedText();
     const validatedText = validateText(selectedText);
@@ -67,6 +70,9 @@ export async function tranformFromTs() {
 
     // Execute
     vscode.commands.executeCommand("vscode.open", tmpFileUri, getViewColumn());
+    vscode.window.showInformationMessage(
+      "typeToJson: Transformation is completed.✅"
+    );
   } catch (error) {
     vscode.window.showErrorMessage((error as { message: string }).message);
   }

@@ -26,6 +26,8 @@ suite("Extension Test Suite", () => {
         adsf: "",
         b: 0,
         cvcxv: [],
+        123: "any",
+        z123: null,
         d: "undefined",
         e: {},
         f: { t: { a: "", b: [], c: { h: { k: "" } } } },

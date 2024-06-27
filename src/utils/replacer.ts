@@ -9,6 +9,8 @@ export default (
     boolean: boolean;
     array: [];
     any: any;
+    null: any;
+    undefined: any;
   }
 ) => {
   const startIndex = text.indexOf("{");
@@ -43,16 +45,25 @@ export default (
   const objectReplaced = arrayReplaced.replace(regexObject, "{}");
   // null
   const regexNull = /null/g;
-  const nullReplaced = objectReplaced.replace(regexNull, "null");
+  const nullReplaced = objectReplaced.replace(
+    regexNull,
+    defaultValues?.null ? `${defaultValues.null}` : "null"
+  );
   // undefined
   const regexUndefined = /undefined/g;
   const undefinedReplaced = nullReplaced.replace(
     regexUndefined,
-    `\"undefined\"`
+    defaultValues?.undefined ? `${defaultValues.undefined}` : `\"undefined\"`
+  );
+  // any
+  const regexAny = /any/g;
+  const anyReplaced = undefinedReplaced.replace(
+    regexAny,
+    defaultValues?.any ? `${defaultValues.any}` : `\"any\"`
   );
   // comment
   const regexComment = /\/\/.+/g;
-  const commentReplaced = undefinedReplaced.replace(regexComment, ""); // remove comment
+  const commentReplaced = anyReplaced.replace(regexComment, ""); // remove comment
   // space
   const regexSpace = /\r\n| |\s+/g;
   const spaceReplaced = commentReplaced.replace(regexSpace, ""); // remove all spaces for finding keys easier.

@@ -16,38 +16,46 @@ This extension makes you get easier default values from your type or interface.
 
 3. Type `Type To Json`
 
-```javascript
+#### Example
+
+Input
+
+```typescript
 type Case1 = {
-  adsf: string,
-  b: number,
-  cvcxv: [],
-  d: undefined, // test
-  e: Object,
+  adsf: string;
+  b: number;
+  cvcxv: [];
+  d: undefined; // undefined will be parsed as string type "undefined"
+  e: Object;
   f: {
     t: {
-      a: string,
-      b: [],
+      a: string;
+      b: [];
       c: {
         h: {
-          k: string,
-        },
-      },
-    },
-  }, // test
-  k: Object,
-  o: { t: { a: string, b: [], c: { h: { j: string, n: number } } } },
+          k: string;
+        };
+      };
+    };
+  };
+  k: Object;
+  o: { t: { a: string; b: []; c: { h: { j: string; n: number } } } };
 };
+```
 
-const transformedCase1 = {
-  adsf: "",
-  b: 0,
-  cvcxv: [],
-  d: undefined,
-  e: {},
-  f: { t: { a: "", b: [], c: { h: { k: "" } } } },
-  k: {},
-  o: { t: { a: "", b: [], c: { h: { j: "", n: 0 } } } },
-};
+Output
+
+```json
+{
+  "adsf": "",
+  "b": 0,
+  "cvcxv": [],
+  "d": "undefined",
+  "e": {},
+  "f": { "t": { "a": "", "b": [], "c": { "h": { "k": "" } } } },
+  "k": {},
+  "o": { "t": { "a": "", "b": [], "c": { "h": { "j": "", "n": 0 } } } }
+}
 ```
 
 ## Extension Settings
@@ -60,19 +68,31 @@ You could customize your default values.
 
 ```json
 {
-    {
-        "typetojson.defaultValues": {
-            "string": "hello",
-            "number": 123,
-            "boolean": false,
-            "array": [],
-            "any": null
-        }
-    }
+  "typetojson.defaultValues": {
+    "string": "hello",
+    "number": 123,
+    "boolean": false,
+    "array": [],
+    "any": "any",
+    "null": null,
+    "undefined": "\"undefined\""
+  }
 }
 ```
 
 Expected output with custom default values.
+
+```typescript
+type Test = {
+  a: string;
+  b: number;
+  c: boolean;
+  d: [];
+  e: any;
+  f: null;
+  g: undefined;
+};
+```
 
 ```json
 {
@@ -80,7 +100,9 @@ Expected output with custom default values.
   "b": 123,
   "c": false,
   "d": [],
-  "e": null
+  "e": "any",
+  "f": null,
+  "g": "undefined"
 }
 ```
 
@@ -100,6 +122,13 @@ I don't recommend to change all types at once. Json will be broken.
 
 - Parsing process is changed.
 - Nested object is available(⚠️imported class name is not usable yet. I will try to find out in next version!).
-- Commented type object is also available(But comment will be removed in json).
+- Comment per property is also available(But comment will be removed in json).
+
+### 1.1.0
+
+- Custom `any`, `undefined`, `null` is available.
+- Process messages will be poped up.
+- Updated test case.
+- Updated Readme.
 
 ---

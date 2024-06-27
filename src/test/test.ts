@@ -17,6 +17,8 @@ export const Test3 = `{
   adsf: string;
   b: number;
   cvcxv: [];
+  123: any;
+  z123: null;
   d: undefined; // test
   e: {};
   f: {
