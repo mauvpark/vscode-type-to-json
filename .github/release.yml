@@ -1,0 +1,5 @@
+changelog:
+  categories:
+    - title: v1.1.0
+      labels:
+        - Semver-Minor
