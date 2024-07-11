@@ -4,7 +4,7 @@
 export default (text: string) => {
   const divide = text.split(":");
   // key case "{a" "...,c"
-  const regexCondition1 = /^{\w+/g; // "{a"
+  const regexCondition1 = /{\w+/g; // "{a"
   const regexCondition2 = /.+,\w+/g; // "...,c"
   const stringifiedList = divide.map((e) => {
     const matchedList1 = e.match(regexCondition1);

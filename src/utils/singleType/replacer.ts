@@ -7,10 +7,6 @@ export default (
     string: string;
     number: number;
     boolean: boolean;
-    array: [];
-    any: any;
-    null: any;
-    undefined: any;
   }
 ) => {
   const startIndex = text.indexOf("{");
@@ -35,32 +31,23 @@ export default (
     defaultValues?.boolean ? `${defaultValues.boolean}` : "false"
   );
   // array
-  const regexArray = /(\[\]) | (Array)/g;
-  const arrayReplaced = booleanReplaced.replace(
-    regexArray,
-    defaultValues?.array ? `${defaultValues.array}` : "[]"
-  );
+  const regexArray = /((\[\])|(Array))(?=;)/g;
+  const arrayReplaced = booleanReplaced.replace(regexArray, "[]");
   // object
-  const regexObject = /({}) | (Object)/g;
+  const regexObject = /({})|(Object)/g;
   const objectReplaced = arrayReplaced.replace(regexObject, "{}");
   // null
   const regexNull = /null/g;
-  const nullReplaced = objectReplaced.replace(
-    regexNull,
-    defaultValues?.null ? `${defaultValues.null}` : "null"
-  );
+  const nullReplaced = objectReplaced.replace(regexNull, "null");
   // undefined
   const regexUndefined = /undefined/g;
   const undefinedReplaced = nullReplaced.replace(
     regexUndefined,
-    defaultValues?.undefined ? `${defaultValues.undefined}` : `\"undefined\"`
+    `\"undefined\"`
   );
   // any
   const regexAny = /any/g;
-  const anyReplaced = undefinedReplaced.replace(
-    regexAny,
-    defaultValues?.any ? `${defaultValues.any}` : `\"any\"`
-  );
+  const anyReplaced = undefinedReplaced.replace(regexAny, `\"any\"`);
   // comment
   const regexComment = /\/\/.+/g;
   const commentReplaced = anyReplaced.replace(regexComment, ""); // remove comment

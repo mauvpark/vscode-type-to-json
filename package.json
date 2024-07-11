@@ -27,6 +27,10 @@
       {
         "command": "typetojson.typetojson",
         "title": "Type To Json: Make default values from a type object"
+      },
+      {
+        "command": "typetojson.complextypestojson",
+        "title": "Type To Json: Make default values from complex types"
       }
     ],
     "configuration": {
@@ -37,11 +41,7 @@
           "default": {
             "string": "",
             "number": 0,
-            "boolean": false,
-            "array": [],
-            "any": "any",
-            "null": null,
-            "undefined": "\"undefined\""
+            "boolean": false
           },
           "description": "Customize your default values."
         }
