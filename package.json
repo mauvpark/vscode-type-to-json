@@ -7,7 +7,7 @@
   "publisher": "mauvpark92",
   "displayName": "typeToJson",
   "description": "Make default json values from your type object.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "license": "MIT",
   "icon": "assets/logo.png",
   "repository": {
