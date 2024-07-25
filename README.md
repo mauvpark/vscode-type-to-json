@@ -12,7 +12,7 @@ This extension makes you get easier default values from your type or interface.
 
 #### One type object
 
-1. Select your type or interface object. Target type or interface's each type property ❗**must be divided with `;`**.
+1. Select your type or interface object. Target type or interface's each type property ❗❗❗**must be divided with `;`**❗❗❗.
 2. Open Command palette by following command.
 
 - Windows: `Ctrl+Shift+P`
@@ -22,7 +22,7 @@ This extension makes you get easier default values from your type or interface.
 
 #### Multiple type objects
 
-1. Select your whole type objects. But you must include `type [name] = {}`, `interface [name] = {}` or it will not work. And each type property ❗**must be divided with `;`**.
+1. Select your whole type objects. But you must include `type [name] = {}`, `interface [name] {}` or it will not work. And each type property ❗❗❗**must be divided with `;`**❗❗❗.
 2. Open Command palette by following command.
 
 - Windows: `Ctrl+Shift+P`
@@ -148,11 +148,7 @@ You could customize your default values.
   "typetojson.defaultValues": {
     "string": "hello",
     "number": 123,
-    "boolean": false,
-    "array": [],
-    "any": "any",
-    "null": null,
-    "undefined": "\"undefined\""
+    "boolean": false
   }
 }
 ```
@@ -164,10 +160,6 @@ type Test = {
   a: string;
   b: number;
   c: boolean;
-  d: [];
-  e: any;
-  f: null;
-  g: undefined;
 };
 ```
 
@@ -175,11 +167,7 @@ type Test = {
 {
   "a": "hello",
   "b": 123,
-  "c": false,
-  "d": [],
-  "e": "any",
-  "f": null,
-  "g": "undefined"
+  "c": false
 }
 ```
 
@@ -187,7 +175,7 @@ type Test = {
 
 This extension divides each type property with `;`. So you must divide each type with `;`.
 
-I don't recommend to change all types at once. Json will be broken.
+Union type is not availabe yet.
 
 ## Release Notes
 
@@ -203,7 +191,7 @@ I don't recommend to change all types at once. Json will be broken.
 
 ### 1.1.0
 
-- Custom `any`, `undefined`, `null` is available.
+- ~~Custom `any`, `undefined`, `null` is available.~~
 - Process messages will be poped up.
 - Updated test case.
 - Updated Readme.
@@ -216,5 +204,9 @@ I don't recommend to change all types at once. Json will be broken.
 
 - Custom array, `any|undefined|null`s are eliminated. Becuase custom array can be replaced with new command `"Type To Json: Make default values from complex types"`. If you need to change `any|undefined|null`, you could change such _special values_ with search.
 - Some regex bugs are fixed.
+
+### 1.2.1
+
+- Update Readme.
 
 ---

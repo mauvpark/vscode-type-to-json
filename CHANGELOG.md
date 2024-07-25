@@ -29,3 +29,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Custom array, `any|undefined|null`s are eliminated. Becuase custom array can be replaced with new command `"Type To Json: Make default values from complex types"`. If you need to change `any|undefined|null`, you could change such _special values_ with search.
 - Some regex bugs are fixed.
+
+## [1.2.1]
+
+- Update Readme.
