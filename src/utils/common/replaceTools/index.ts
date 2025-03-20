@@ -19,7 +19,6 @@ export const stringTool = (replaceTarget: string, defaultValue?: string) => {
  * @returns Replaced text
  */
 export const numberTool = (replaceTarget: string, defaultValue?: number) => {
-	console.log("called");
 	const regexNumber = /number(?=;)/g;
 	return replaceTarget.replace(
 		regexNumber,

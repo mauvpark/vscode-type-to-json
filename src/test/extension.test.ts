@@ -22,7 +22,6 @@ suite("Extension Test Suite", () => {
 
 	test("Complicating object with comments", () => {
 		const result = singleTypeProcessor(MockTypes.Test3);
-		console.log("result", result);
 		const parse = JSON.parse(result);
 		assert.deepEqual(
 			{

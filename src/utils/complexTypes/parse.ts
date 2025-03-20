@@ -13,7 +13,6 @@ export default (text: string) => {
 		customSettings.get("defaultValues")
 	);
 	const stringifiedJson = stringifier(typeReplacedText);
-	console.log("string", stringifiedJson); // TODO 삭제
 	const json = JSON.parse(stringifiedJson);
 
 	return json;
