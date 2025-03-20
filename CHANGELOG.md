@@ -33,3 +33,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [1.2.1]
 
 - Update Readme.
+
+## [1.3.0]
+
+- Support additional array types. (e.g. `string[]`, `number[]`, `boolean[]`, `Function[]`, `(() => any)[]`)
+- Support function types. (e.g. `Function`, `() => any`)
