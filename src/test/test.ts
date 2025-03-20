@@ -33,7 +33,7 @@ export const Test3 = `type Test3 = {
     };
   }; // test
   k: Object;
-  o: { t: { a: string; b: []; c: { h: { j: string; n: number } } } };
+  o: { t: { a: string; b: []; c: { h: { j: string; n: number; } } } };
 };`;
 
 export const Test4 = `
@@ -63,5 +63,22 @@ interface Info {
   qqqqaaaaa: Child2[]; // test comment~
   ttt: Array<Child2>;
   ccccxxxxx: Child1[];
+}
+`;
+
+export const Test5 = `
+interface A {
+	test: {
+		a: string[];
+		b: number[];
+		c: boolean[];
+		d: Boolean[];
+		e: (value: string) => void;
+		f: (value: string) => void;
+    g: Function[];
+    k: ((abc: string) => boolean)[];
+    // z: string | number;
+    // er: string[] | null[];
+	};
 }
 `;

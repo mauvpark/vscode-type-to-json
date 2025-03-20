@@ -1,133 +1,106 @@
+import {
+	anyTool,
+	arrayTool,
+	booleanTool,
+	commentTool,
+	functionTool,
+	nullTool,
+	numberTool,
+	objectTool,
+	semicolonTool,
+	spaceTool,
+	stringTool,
+	undefinedTool,
+} from "../common/replaceTools";
+
+const customArrayTool = (replaceTarget: string) => {
+	const regexListType = /(([A-Z]\w+\[\])|(Array<\w+>))(?=;)/g;
+	let listTypeReplaced = replaceTarget;
+	const regexListTypePatternList = replaceTarget.match(regexListType);
+	regexListTypePatternList?.forEach((listType) => {
+		let regexListType = listType; // square brackets([]) would be accepted as regex. so they have to be changed.
+		if (listType.includes("[")) {
+			regexListType = regexListType
+				.replaceAll("[", `\\[`)
+				.replaceAll("]", `\\]`);
+		}
+		listTypeReplaced = listTypeReplaced.replace(
+			new RegExp(`${regexListType}`, "g"),
+			`"type-${listType}"`
+		);
+	});
+
+	return listTypeReplaced;
+};
+
+const markCustomTypeTool = (replaceTarget: string) => {
+	const regexType = /[A-Z]\w+(?=;)/g;
+	const typeTitleList = replaceTarget.match(regexType);
+	let typeTitleReplaced = replaceTarget;
+	typeTitleList?.forEach(
+		(title) =>
+			(typeTitleReplaced = typeTitleReplaced.replaceAll(
+				new RegExp(`${title}(?=;)`, "g"),
+				`"type-${title}"`
+			))
+	);
+
+	return typeTitleReplaced;
+};
+
 /**
  * Replace type to having default value
  */
 export default (
-  text: string,
-  defaultValues?: {
-    string: string;
-    number: number;
-    boolean: boolean;
-  }
+	text: string,
+	defaultValues?: {
+		string: string;
+		number: number;
+		boolean: boolean;
+	}
 ) => {
-  const regexTitle = /\w+( )?(=)?( )?{/g;
-  const regexTitleExtractor = /\w+/g;
-  const title = text
-    .match(regexTitle)
-    ?.at(0)
-    ?.match(regexTitleExtractor)
-    ?.at(0);
+	const regexTitle = /\w+( )?(=)?( )?{/g;
+	const regexTitleExtractor = /\w+/g;
+	const title = text
+		.match(regexTitle)
+		?.at(0)
+		?.match(regexTitleExtractor)
+		?.at(0);
 
-  const startIndex = text.indexOf("{");
-  const endIndex = text.lastIndexOf("}"); // Type value could be object type. So, it must be last index or should check signs are matching.
-  const onlyKeyTypeText = text.slice(startIndex + 1, endIndex - 1);
+	const startIndex = text.indexOf("{");
+	const endIndex = text.lastIndexOf("}"); // Type value could be object type. So, it must be last index or should check signs are matching.
+	const onlyKeyTypeText = text.slice(startIndex + 1, endIndex - 1);
 
-  // string
-  const regexString = /string/g;
-  const stringReplaced = onlyKeyTypeText.replace(
-    regexString,
-    defaultValues?.string ? `${defaultValues.string}` : `\"\"`
-  );
+	// string
+	const stringReplaced = stringTool(onlyKeyTypeText, defaultValues?.string);
+	// number
+	const numberReplaced = numberTool(stringReplaced, defaultValues?.number);
+	// boolean
+	const booleanReplaced = booleanTool(numberReplaced, defaultValues?.boolean);
+	// default array
+	const arrayReplaced = arrayTool(booleanReplaced);
+	// typed array
+	const typedArrayReplaced = customArrayTool(arrayReplaced);
+	// function
+	const functionReplaced = functionTool(typedArrayReplaced);
+	// object
+	const objectReplaced = objectTool(functionReplaced);
+	// null
+	const nullReplaced = nullTool(objectReplaced);
+	// undefined
+	const undefinedReplaced = undefinedTool(nullReplaced);
+	// any
+	const anyReplaced = anyTool(undefinedReplaced);
+	// comment
+	const commentReplaced = commentTool(anyReplaced);
+	// type name
+	const typeTitleReplaced = markCustomTypeTool(commentReplaced);
+	// space
+	const spaceReplaced = spaceTool(typeTitleReplaced);
+	// semicolon
+	const semicolonReplaced = semicolonTool(spaceReplaced);
 
-  // number
-  const regexNumber = /number/g;
-  const numberReplaced = stringReplaced.replace(
-    regexNumber,
-    defaultValues?.number ? `${defaultValues.number}` : "0"
-  );
+	const result = `{${title}: {${semicolonReplaced}}}`;
 
-  // boolean
-  const regexBoolean = /(boolean)|(Boolean)/g;
-  const booleanReplaced = numberReplaced.replace(
-    regexBoolean,
-    defaultValues?.boolean ? `${defaultValues.boolean}` : "false"
-  );
-
-  // array
-  // typed array
-  const regexListType = /(([A-Z]\w+\[\])|(Array<\w+>))(?=;)/g;
-  let listTypeReplaced = booleanReplaced;
-  const regexListTypePatternList = booleanReplaced.match(regexListType);
-  regexListTypePatternList?.forEach((listType) => {
-    let regexListType = listType; // square brackets([]) would be accepted as regex. so they have to be changed.
-    if (listType.includes("[")) {
-      regexListType = regexListType
-        .replaceAll("[", `\\[`)
-        .replaceAll("]", `\\]`);
-    }
-    listTypeReplaced = listTypeReplaced.replace(
-      new RegExp(`${regexListType}`, "g"),
-      `"type-${listType}"`
-    );
-  });
-  // default array
-  const regexArray = /((\[\])|(Array))(?=;)/g;
-  const arrayReplaced = listTypeReplaced.replace(regexArray, "[]");
-
-  // object
-  const regexObject = /({})|(Object)/g;
-  const objectReplaced = arrayReplaced.replace(regexObject, "{}");
-
-  // null
-  const regexNull = /null/g;
-  const nullReplaced = objectReplaced.replace(regexNull, "null");
-
-  // undefined
-  const regexUndefined = /undefined/g;
-  const undefinedReplaced = nullReplaced.replace(
-    regexUndefined,
-    `\"undefined\"`
-  );
-
-  // any
-  const regexAny = /any/g;
-  const anyReplaced = undefinedReplaced.replace(regexAny, `\"any\"`);
-
-  // comment
-  const regexComment = /\/\/.+/g;
-  const commentReplaced = anyReplaced.replace(regexComment, ""); // remove comment
-
-  // type name
-  const regexType = /[A-Z]\w+(?=;)/g;
-  const typeTitleList = commentReplaced.match(regexType);
-  let typeTitleReplaced = commentReplaced;
-  typeTitleList?.forEach(
-    (title) =>
-      (typeTitleReplaced = typeTitleReplaced.replaceAll(
-        new RegExp(`${title}(?=;)`, "g"),
-        `"type-${title}"`
-      ))
-  );
-
-  // space
-  const regexSpace = /\r\n| |\s+/g;
-  const spaceReplaced = typeTitleReplaced.replace(regexSpace, ""); // remove all spaces for finding keys easier.
-
-  // semicolon
-  const regexNoObjAndSemicolon = /[^}];\w/g;
-  const noObjAndSemicolonPatternList = spaceReplaced.match(
-    regexNoObjAndSemicolon
-  );
-  let noObjAndSemicolonReplaced = spaceReplaced;
-  noObjAndSemicolonPatternList?.forEach(
-    (pattern) =>
-      (noObjAndSemicolonReplaced = noObjAndSemicolonReplaced.replace(
-        pattern,
-        pattern.replace(";", ",")
-      ))
-  );
-  const regexObjAndSemicolon = /};\w/g;
-  const objAndSemicolonPatternList = spaceReplaced.match(regexObjAndSemicolon);
-  let objAndSemicolonReplaced = noObjAndSemicolonReplaced;
-  objAndSemicolonPatternList?.forEach(
-    (pattern) =>
-      (objAndSemicolonReplaced = objAndSemicolonReplaced.replace(
-        pattern,
-        pattern.replace(";", ",")
-      ))
-  );
-  const regexSemicolon = /;/g;
-  const semicolonReplaced = objAndSemicolonReplaced.replace(regexSemicolon, "");
-  const result = `{${title}: {${semicolonReplaced}}}`;
-
-  return result;
+	return result;
 };
