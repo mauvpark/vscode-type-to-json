@@ -5,7 +5,7 @@
  * @returns Replaced text
  */
 export const stringTool = (replaceTarget: string, defaultValue?: string) => {
-	const regexString = /string(?=;)/g;
+	const regexString = /(string ?\|.+)(?=;)|(string(?=;))/g;
 	return replaceTarget.replace(
 		regexString,
 		defaultValue ? `${defaultValue}` : `\"\"`
@@ -19,7 +19,7 @@ export const stringTool = (replaceTarget: string, defaultValue?: string) => {
  * @returns Replaced text
  */
 export const numberTool = (replaceTarget: string, defaultValue?: number) => {
-	const regexNumber = /number(?=;)/g;
+	const regexNumber = /(number ?\|.+)(?=;)|(number(?=;))/g;
 	return replaceTarget.replace(
 		regexNumber,
 		defaultValue ? `${defaultValue}` : "0"
@@ -33,10 +33,11 @@ export const numberTool = (replaceTarget: string, defaultValue?: number) => {
  * @returns Replaced text
  */
 export const booleanTool = (replaceTarget: string, defaultValue?: boolean) => {
-	const regexBoolean = /((boolean)|(Boolean))(?=;)/g;
+	const regexBoolean =
+		/(((boolean)|(Boolean)) ?\|.+)(?=;)|((boolean)|(Boolean))(?=;)/g;
 	return replaceTarget.replace(
 		regexBoolean,
-		defaultValue ? `${defaultValue}` : "false"
+		defaultValue ? `${defaultValue}` : "true"
 	);
 };
 
@@ -49,7 +50,7 @@ export const arrayTool = (replaceTarget: string) => {
 	return replaceTarget
 		.replace(/(string\[\])(?=;)/g, '[""]')
 		.replace(/(number\[\])(?=;)/g, "[0]")
-		.replace(/((boolean\[\])|(Boolean\[\]))(?=;)/g, "[false]")
+		.replace(/((boolean\[\])|(Boolean\[\]))(?=;)/g, "[true]")
 		.replace(/(Function\[\])(?=;)/g, '["function"]') // e.g. Function[];
 		.replace(/\(\(.*\) ?\=\> ?[a-zA-Z0-9]*\)\[\](?=;)/g, '["function"]') // e.g. ((abc: string) => boolean)[];
 		.replace(/((\[\])|(Array))(?=;)/g, "[]");
@@ -77,7 +78,7 @@ export const objectTool = (replaceTarget: string) => {
  * @returns Replaced text
  */
 export const nullTool = (replaceTarget: string) => {
-	const regexNull = /null(?=;)/g;
+	const regexNull = /(null ?\|.+)(?=;)|(null(?=;))/g;
 	return replaceTarget.replace(regexNull, "null");
 };
 
@@ -87,7 +88,7 @@ export const nullTool = (replaceTarget: string) => {
  * @returns Replaced text
  */
 export const undefinedTool = (replaceTarget: string) => {
-	const regexUndefined = /undefined(?=;)/g;
+	const regexUndefined = /(undefined ?\|.+)(?=;)|(undefined(?=;))/g;
 	return replaceTarget.replace(regexUndefined, `\"undefined\"`);
 };
 
@@ -97,7 +98,7 @@ export const undefinedTool = (replaceTarget: string) => {
  * @returns Replaced text
  */
 export const anyTool = (replaceTarget: string) => {
-	const regexAny = /any(?=;)/g;
+	const regexAny = /(any ?\|.+)(?=;)|(any(?=;))/g;
 	return replaceTarget.replace(regexAny, `\"any\"`);
 };
 

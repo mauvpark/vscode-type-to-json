@@ -2,13 +2,40 @@ import { validateText } from "../common/steps";
 import divider from "./divider";
 import parse from "./parse";
 
-function replaceValue(obj: any, targetValue: any, newValue: any) {
+function replaceValue(
+	obj: Record<string, any>,
+	targetValue: string,
+	newValue: any
+) {
 	for (const key in obj) {
 		if (obj[key] === targetValue) {
 			obj[key] = newValue;
 			return;
-		} else if (typeof obj[key] === "object") {
+		}
+
+		if (typeof obj[key] === "object") {
 			replaceValue(obj[key], targetValue, newValue);
+		}
+	}
+}
+
+/**
+ * Apply extending type where it has 'extends' in interface or type.
+ */
+function applyExtension(
+	obj: Record<string, any>,
+	targetKey: string,
+	extensionObj: Record<string, any>
+) {
+	for (const key in obj) {
+		if (obj[key][targetKey]) {
+			delete obj[key][targetKey];
+			obj[key] = { ...obj[key], ...extensionObj };
+			return;
+		}
+
+		if (typeof obj[key] === "object") {
+			applyExtension(obj[key], targetKey, extensionObj);
 		}
 	}
 }
@@ -32,6 +59,9 @@ export function complexTypesProcessor(text: string) {
 		// Array type name e.g. {a: MyType[]; b: Array<MyType>;}
 		replaceValue(json, `type-${typeName}[]`, [combinedJson[typeName]]);
 		replaceValue(json, `type-Array<${typeName}>`, [combinedJson[typeName]]);
+
+		applyExtension(json, `extend${typeName}`, combinedJson[typeName]);
+
 		stringifiedJson = JSON.stringify(json);
 	});
 

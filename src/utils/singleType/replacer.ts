@@ -26,7 +26,7 @@ export default (
 ) => {
 	const startIndex = text.indexOf("{");
 	const endIndex = text.lastIndexOf("}"); // Type value could be object type. So, it must be last index or should check signs are matching.
-	const onlyKeyTypeText = text.slice(startIndex + 1, endIndex - 1);
+	const onlyKeyTypeText = text.slice(startIndex + 1, endIndex);
 
 	// string
 	const stringReplaced = stringTool(onlyKeyTypeText, defaultValues?.string);

@@ -59,17 +59,24 @@ export default (
 		boolean: boolean;
 	}
 ) => {
-	const regexTitle = /\w+( )?(=)?( )?{/g;
-	const regexTitleExtractor = /\w+/g;
-	const title = text
-		.match(regexTitle)
-		?.at(0)
-		?.match(regexTitleExtractor)
+	const regexTitle = /(\w+(?=(( extends)?|( ?=)?).+{))/g;
+	const fullTitleRegex = /.+(?={)/g;
+	const fullTitle = text.match(fullTitleRegex)?.at(0);
+	const title = text.match(regexTitle)?.at(0);
+
+	const extendType = fullTitle
+		?.split(/extends|=/)
+		?.at(1)
+		?.match(/\w+/)
 		?.at(0);
 
 	const startIndex = text.indexOf("{");
 	const endIndex = text.lastIndexOf("}"); // Type value could be object type. So, it must be last index or should check signs are matching.
-	const onlyKeyTypeText = text.slice(startIndex + 1, endIndex - 1);
+	let onlyKeyTypeText = text.slice(startIndex + 1, endIndex);
+
+	if (extendType) {
+		onlyKeyTypeText = `extend${extendType}: ${extendType};${onlyKeyTypeText}`;
+	}
 
 	// string
 	const stringReplaced = stringTool(onlyKeyTypeText, defaultValues?.string);
