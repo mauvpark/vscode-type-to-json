@@ -38,3 +38,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Support additional array types. (e.g. `string[]`, `number[]`, `boolean[]`, `Function[]`, `(() => any)[]`)
 - Support function types. (e.g. `Function`, `() => any`)
+
+## [1.4.0]
+
+- Update algorithm.
+- Support "extends, &"
