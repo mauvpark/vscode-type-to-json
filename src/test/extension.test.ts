@@ -98,8 +98,8 @@ suite("Extension Test Suite", () => {
 					test: {
 						a: [""],
 						b: [0],
-						c: [false],
-						d: [false],
+						c: [true],
+						d: [true],
 						e: "function",
 						f: "function",
 						g: ["function"],
